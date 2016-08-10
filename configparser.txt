@@ -1,0 +1,4 @@
+try:\
+    from ConfigParser import ConfigParser\
+except ImportError:\
+    from configparser import ConfigParser
