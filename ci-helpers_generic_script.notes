@@ -1,0 +1,18 @@
+for i in $(grep -v "#" notes/list_of_affiliates); do
+    echo "================="
+    echo $i
+    echo "================="
+    cd $i
+    git fetch --all
+    upstream=$(basename $i)
+    if [[ ! -z $(grep "TRAVIS_OS_NAME.sh" .travis.yml) ]]; then
+       git checkout -b ci-helpers_use_generic_script ${upstream}/master
+       sed -i -e "s|source ci-helpers/travis/setup_conda_\$TRAVIS_OS_NAME.sh|source ci-helpers/travis/setup_conda.sh|"g .travis.yml
+       git add .travis.yml
+       git commit -m "Use the generic ci-helpers script, it will figure out OS [skip appveyor]"
+       git push bsipocz ci-helpers_use_generic_script
+    fi
+
+    cd -
+done
+
