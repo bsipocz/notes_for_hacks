@@ -1,0 +1,39 @@
+## TODO:
+## - probably can be removed, check: fix_column_name
+## - hdu.header.iteritems? is it still needed?
+##
+## - np 1.9 compatibilities
+
+
+# six imports
+grr "extern import six" astropy|grep -v Binary|gawk -F : '{print $1}'|uniq|xargs sed -i '/extern import six/d'
+grr "extern.six" astropy|grep import|grep -v Binary|gawk -F : '{print $1}'|uniq|xargs sed -i '/extern.six/d'
+
+# six.interger_types
+grr "six.integer_types" astropy|grep -v Binary|gawk -F : '{print $1}'|uniq|xargs sed -i -e 's/six.integer_types/int/'g
+# six.string_types
+grr "six.string_types" astropy|grep -v Binary|gawk -F : '{print $1}'|uniq|xargs sed -i -e 's/six.string_types/str/'g
+# six.text_type
+grr "six.text_type" astropy|grep -v Binary|gawk -F : '{print $1}'|uniq|xargs sed -i -e 's/six.text_type/str/'g
+# six.binary_type
+grr "six.binary_type" astropy|grep -v Binary|gawk -F : '{print $1}'|uniq|xargs sed -i -e 's/six.binary_type/bytes/'g
+
+# @six.add_metaclass
+# manual edit
+
+# six.iteritems (and some manual edits)
+grr "six.iteritems" astropy|grep -v "Binary file"|gawk -F : '{print $1}'|uniq|xargs sed -E -i 's|six.iteritems\(([A-z0-9._]+)(\))|\1.items\(\)|g'
+# six.itervalues (and some manual edits)
+grr "six.itervalues" astropy|grep -v "Binary file"|gawk -F : '{print $1}'|uniq|xargs sed -E -i 's|six.itervalues\(([A-z0-9._]+)(\))|\1.values\(\)|g'
+
+# six.PY2
+# manual edits
+
+#six.callable
+grr "six.callable" astropy|grep -v Binary|gawk -F : '{print $1}'|xargs sed -i -e 's/six.callable/callable/'g
+
+#six.next()
+grr "six.next" astropy/|grep -v Binary|gawk -F : '{print $1}'|xargs sed -i -e 's/six.next/next/'g
+
+# __future__
+grr "from __future__" astropy|grep -v Binary|gawk -F : '{print $1}'|uniq|xargs sed -i '/from __future__/d'
